@@ -1,7 +1,7 @@
 Summary:	The YASM Modular Assembler
 Name:		yasm
 Version:	1.2.0
-Release:	2
+Release:	3
 License:	distributable (BSD, GPL, LGPL, Artistic; see COPYING)
 Group:		Development/Tools
 Source0:	http://www.tortall.net/projects/yasm/releases/%{name}-%{version}.tar.gz
@@ -31,6 +31,12 @@ Header files and static libyasm library.
 
 %prep
 %setup -q
+
+# Use a larger hash table size
+# Increases compilation speed of files with a large number of macros
+# by around 20x.
+%{__sed} -i 's/#define NHASH 31/#define NHASH 4096/' \
+    modules/preprocs/nasm/nasm-pp.c
 
 %build
 %{__libtoolize}
